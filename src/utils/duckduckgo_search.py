@@ -1,6 +1,8 @@
 from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_core.messages import SystemMessage, HumanMessage
 from huggin_face_client import ConnectHugginface
+import re
+from dateparser import parse
 import requests
 import bs4
 
@@ -17,7 +19,7 @@ class DuckDuckGo:
         self.wrapper = DuckDuckGoSearchAPIWrapper(max_results=max_results)
 
     def search_duckduckgo(self, query):
-        results = self.wrapper.results(query, max_results=self.wrapper.max_results)
+        results = self.wrapper.results(query+'with publish date', max_results=self.wrapper.max_results)
         return results
 
     def fetch_url_text(self, url,user_query):
@@ -47,13 +49,13 @@ class DuckDuckGo:
             output={}
             response=self.search_duckduckgo(query)
             for content in response:
+                print(content)
                 url=content['link']
                 if url not in have_data:
-                    output[url]=self.fetch_url_text(url,query)
+                    output[url]=[{'summary':self.fetch_url_text(url,query),'published_date':None}]
                 else:
                     continue
             return output
         except Exception as e:
             print('get all data error ',e)
             return output
-    
