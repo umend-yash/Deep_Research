@@ -5,6 +5,5 @@
 *.json
 venv/
 *.ipynb
-config/
 __pycache__/
 *.pyc
