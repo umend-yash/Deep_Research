@@ -1,0 +1,10 @@
+*.log
+*.yaml
+*.yml
+.env
+*.json
+venv/
+*.ipynb
+config/
+__pycache__/
+*.pyc
