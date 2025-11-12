@@ -20,7 +20,6 @@ class DuckDuckGo:
         results = self.wrapper.results(query, max_results=self.wrapper.max_results)
         return results
 
-
     def fetch_url_text(self, url,user_query):
         try:
             if str(url).startswith('https:'):

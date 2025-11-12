@@ -3,14 +3,32 @@ generate_search_queries_prompt = """Given the user query: '{user_query}', genera
 Guidelines:
 - Identify key components of the query and determine if multiple searches are required to cover different aspects.
 - Generate a logical sequence of search queries that refine and expand the results progressively.
-- Ensure that the total number of search queries does not exceed {MAX_QUERY_GENERATIONS}.
+- Ensure that the total number of search queries does not exceed {MAX_QUERY_GENERATIONS} .
 - Use variations in phrasing, synonyms, and alternative search approaches where applicable to maximize coverage.
 - Today's date is {current_date} for your reference if needed.
 
 Output Format:
 - Provide each search query on a new line without any additional text, explanations, or headers or line number.
-- Do no give triple backticks or any other formatting, just the query itself
+- Do no give triple backticks or any other formatting, just the query itself.
+- Provide each search query on a new line, without numbering, bullet points, or any list formatting.
+- Do NOT use "1.", "2.", "1)", or any other form of enumeration.
+Example (Incorrect Format):
+1. Artificial Intelligence definition
+2. What is the meaning of Artificial Intelligence
+3. Explain Artificial Intelligence technology
+
+Example (Correct Format):
+Artificial Intelligence definition
+What is the meaning of Artificial Intelligence
+Explain Artificial Intelligence technology
+
 """
+
+generate_search_queries_system_prompt="""You are a helpful assistant that don't give reply in Output Format:
+- Provide each search query on a new line without any additional text, explanations, or headers or line number.
+- Do no give triple backticks or any other formatting, just the query itself.
+- Provide each search query on a new line, without numbering, bullet points, or any list formatting.
+- Do NOT use "1.", "2.", "1)", or any other form of enumeration. """
 
 final_news_report_prompt = """#### Task
 Generate a concise and well-structured markdown report based on the given user query and retrieved search results. The report should synthesize key insights, highlight critical information, and present findings in a clear and actionable manner.
@@ -90,6 +108,10 @@ Search Results:
 ```
 {search_results}
 ```"""
+
+
+final_news_report_system_prompt ="""You are an expert news analyst and concise report writer.
+you Generate a concise and well-structured markdown report based on the given user query and search results. The report should synthesize key insights, highlight critical information, and be clear and actionable."""
 
 summerize_data_for_query="""You are a skilled and professional news summarizer.
 Please read the following data carefully. It contains the latest news and information relevant to the query: "{user_query}". 

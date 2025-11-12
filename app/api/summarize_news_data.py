@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Body, HTTPException
+from langchain_core.messages import SystemMessage, HumanMessage
 from pydantic import BaseModel
 from datetime import datetime
 from pathlib import Path
@@ -17,7 +18,7 @@ if str(prompt_path) not in sys.path:
 
 from huggin_face_client import ConnectHugginface
 from duckduckgo_search import DuckDuckGo
-from prompt_template import final_news_report_prompt
+from prompt_template import final_news_report_prompt,final_news_report_system_prompt
 
 router = APIRouter()
 
@@ -39,6 +40,8 @@ async def news_summarize(request: SummarizationNewsRequest = Body(...)) -> dict:
         raise HTTPException(status_code=503, detail="Unable to connect to Huggingface model")
 
     llm = connection_status['model']
-    summarized_content = llm.invoke(final_news_report_prompt.format(user_query=request.query, search_results=request.search_results))
 
+    system_msg = SystemMessage(content=final_news_report_system_prompt)
+    human_msg = HumanMessage(content=final_news_report_prompt.format(user_query=request.query, search_results=request.search_results))
+    summarized_content=llm.invoke([system_msg, human_msg])
     return {"summary": summarized_content}
