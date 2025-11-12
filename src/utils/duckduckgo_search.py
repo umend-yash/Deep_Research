@@ -1,4 +1,5 @@
 from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
+from langchain_core.messages import SystemMessage, HumanMessage
 from huggin_face_client import ConnectHugginface
 import requests
 import bs4
@@ -31,21 +32,21 @@ class DuckDuckGo:
                 if not connection_status.get('status'):
                     print('why here')
                     return text_content[:5000]
-
+                system_msg = SystemMessage(content="You are a helpful assistant specializing in news summarization.")
+                human_msg = HumanMessage(content=summerize_data_for_query.format(user_query=user_query,data=text_content[:20000]))
                 llm =connection_status['model']
-                output=llm.invoke(summerize_data_for_query.format(user_query=user_query,data=text_content[:20000]))
+                output=llm.invoke([system_msg, human_msg])
                 return output.content
             else:
                 return  None
         except Exception as e:
             print('eeeeeeeeeeeeee',e)
+            return None
         
     def get_all_data_about(self,query,have_data):
         try:
-            print('kkkkkkkkkkkkkkk')
             output={}
             response=self.search_duckduckgo(query)
-            print('ppppppppppp',response)
             for content in response:
                 url=content['link']
                 if url not in have_data:

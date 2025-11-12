@@ -91,12 +91,10 @@ Search Results:
 {search_results}
 ```"""
 
-summerize_data_for_query="""You are an expert news summarizer.
-
-Given the following  data about "{user_query}", generate a clear and concise summary that captures the main points, key events, dates, and relevant details. 
-Focus on factual information and avoid opinions or speculation.
-
+summerize_data_for_query="""You are a skilled and professional news summarizer.
+Please read the following data carefully. It contains the latest news and information relevant to the query: "{user_query}". 
+Generate a detailed and comprehensive summary focusing on the most important facts, key developments, dates, 
+involved parties, and any relevant context. The summary should be informative, well-structured, and clear to a knowledgeable reader who wants an in-depth understanding without extraneous opinions or speculation.
 Data:
 {data}
-
 Summary:"""
