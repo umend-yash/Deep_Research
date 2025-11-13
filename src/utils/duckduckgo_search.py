@@ -13,6 +13,7 @@ if str(prompt_path) not in sys.path:
     sys.path.insert(0, str(prompt_path))
 
 from prompt_template import summerize_data_for_query
+from lite_llm_client import create_chat_model
 
 class DuckDuckGo:
     def __init__(self, max_results=3):
@@ -28,7 +29,7 @@ class DuckDuckGo:
                 res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
                 soup = bs4.BeautifulSoup(res.text, "lxml")
                 text_content = soup.body.get_text(" ", strip=True) if soup.body else ""
-                connection_status = ConnectHugginface()
+                connection_status = create_chat_model()
 
                 if not connection_status.get('status'):
                     print('why here')

@@ -16,6 +16,8 @@ if str(prompt_path) not in sys.path:
 from huggin_face_client import ConnectHugginface
 from duckduckgo_search import DuckDuckGo
 from prompt_template import generate_search_queries_prompt
+from lite_llm_client import create_chat_model
+
 
 router = APIRouter()
 

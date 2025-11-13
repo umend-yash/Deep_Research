@@ -16,6 +16,7 @@ if str(prompt_path) not in sys.path:
 from huggin_face_client import ConnectHugginface
 from duckduckgo_search import DuckDuckGo
 from prompt_template import generate_search_queries_prompt,generate_search_queries_system_prompt
+from lite_llm_client import create_chat_model
 
 router = APIRouter()
 
@@ -26,7 +27,7 @@ async def generate_relevant_queries( query: str = Body(..., description="User qu
     Takes user query and returns a list of refined search queries.
     """
     current_date = datetime.today().strftime("%d %B %Y")
-    connection_status = ConnectHugginface()
+    connection_status = create_chat_model()
 
     if not connection_status.get('status'):
         raise HTTPException(status_code=503, detail="Unable to connect to Huggingface model")

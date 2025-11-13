@@ -19,6 +19,7 @@ if str(prompt_path) not in sys.path:
 from huggin_face_client import ConnectHugginface
 from duckduckgo_search import DuckDuckGo
 from prompt_template import final_news_report_prompt,final_news_report_system_prompt
+from lite_llm_client import create_chat_model
 
 router = APIRouter()
 
@@ -34,7 +35,7 @@ async def news_summarize(request: SummarizationNewsRequest = Body(...)) -> dict:
     """
     Summarizes news content based on user query and search results.
     """
-    connection_status = ConnectHugginface()
+    connection_status = create_chat_model()
 
     if not connection_status.get('status'):
         raise HTTPException(status_code=503, detail="Unable to connect to Huggingface model")
