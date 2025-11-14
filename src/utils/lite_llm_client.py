@@ -1,9 +1,10 @@
 import os
 from dotenv import load_dotenv
 from langchain_litellm import ChatLiteLLM
-from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
 from pathlib import Path
 import yaml
+
+
 
 HUGGINGFACE_CONFIG_PATH = Path(__file__).parent.parent.parent  / 'config' / 'hugging_config.yaml'
 def load_hugging_config():
@@ -29,7 +30,8 @@ def create_chat_model(provider: str=PROVIDE, model_name: str=DEPLOYMENT_NAME, te
         Supported providers: 'huggingface', 'azure', 'openai'
         """
         if provider=='azure':
-            
+            import litellm
+            litellm.drop_params=True
             os.environ["AZURE_API_KEY"] = azure_config["AZURE_OPENAI_KEY"]
             os.environ["AZURE_API_BASE"] = azure_config["AZURE_OPENAI_ENDPOINT"]
             os.environ["AZURE_API_VERSION"] =azure_config["AZURE_TEXT_OPENAI_VERSION"]
