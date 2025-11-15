@@ -119,4 +119,4 @@ Generate a detailed and comprehensive summary focusing on the most important fac
 involved parties, and any relevant context. The summary should be informative, well-structured, and clear to a knowledgeable reader who wants an in-depth understanding without extraneous opinions or speculation.
 Data:
 {data}
-Summary:"""
+Summary in details:"""
