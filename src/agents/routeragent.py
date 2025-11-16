@@ -4,11 +4,12 @@ from langchain_core.messages import HumanMessage,SystemMessage
 from pathlib import Path
 import sys
 
-src_path = Path.cwd().parent / 'llm'
+src_path = Path.cwd().parent / 'src' / 'llm'
+print(src_path,'11111111111111111')
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
 
-prompt_path = Path.cwd().parent /  "prompt_engineering"
+prompt_path = Path.cwd().parent / 'src' / "prompt_engineering"
 if str(prompt_path) not in sys.path:
     sys.path.insert(0, str(prompt_path))
 
