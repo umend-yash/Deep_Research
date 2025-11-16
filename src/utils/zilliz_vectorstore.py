@@ -8,7 +8,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from azure_client import connect_azure_embedding
 from pathlib import Path
 import yaml
-
+import asyncio
 from langchain_community.vectorstores import Zilliz
 
 CONFIG_PATH = Path(__file__).parent.parent.parent  / 'config' / 'zilliz_config.yaml'
@@ -81,7 +81,7 @@ class ZillizVectorStore:
 
 
 
-def store_in_vector_store(input):
+async def store_in_vector_store(input):
     try:
         azure_embedding = connect_azure_embedding()
         embeddings = azure_embedding['model'] if azure_embedding['status'] else None
@@ -91,19 +91,24 @@ def store_in_vector_store(input):
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         chunks = text_splitter.split_text(input)
 
-        vector_store = ZillizVectorStore()
-        doc_embeddings = embeddings.embed_documents(chunks)
-        vector_store.insert_documents(doc_embeddings, chunks)
-        vector_store.create_index()
-        vector_store.load_collection()
-        return True
+        # Run blocking vector store operations in thread to avoid blocking event loop
+        def blocking_store():
+            vector_store = ZillizVectorStore()
+            doc_embeddings = embeddings.embed_documents(chunks)
+            vector_store.insert_documents(doc_embeddings, chunks)
+            vector_store.create_index()
+            vector_store.load_collection()
+            return True
+
+        result = await asyncio.to_thread(blocking_store)
+        return result
     except Exception as e:
         print(f"Error storing documents in vector store: {e}")
         return False
 
 
 
-def search_in_vector_store(user_input, top_k=5):
+async def search_in_vector_store(user_input, top_k=5):
     try:
         azure_embedding = connect_azure_embedding()
         embeddings = azure_embedding["model"]
@@ -117,7 +122,7 @@ def search_in_vector_store(user_input, top_k=5):
             text_field="text",
             vector_field="embedding"   
         )
-        results = vector_store.similarity_search_with_score(
+        results = await vector_store.asimilarity_search_with_score(
             user_input,
             k=top_k
         )

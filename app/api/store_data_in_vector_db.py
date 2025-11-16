@@ -14,14 +14,13 @@ from zilliz_vectorstore import store_in_vector_store
 
 router = APIRouter()
 
-@router.post("/store_in_vectorstore", tags=["Store"],summary="Store in vector db",description="Store importent data in milvus vector database")
+@router.post("/store_in_vectorstore", tags=["Store"],summary="Store in vector db",description="Store important data in milvus vector database")
 async def store_documents_in_vectorstore( input: dict = Body(..., description="Input text to store in vector store")):
     """
     Takes user input text and stores it in the vector store.
     """
     try:
-        print(input)
-        status = store_in_vector_store(input['input'])
+        status = await store_in_vector_store(input['input'])
         if not status:
             raise HTTPException(status_code=500, detail="Failed to store documents in vector store.")
         return {"status": "Documents stored successfully in vector store."}

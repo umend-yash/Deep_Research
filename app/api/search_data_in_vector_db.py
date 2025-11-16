@@ -14,18 +14,17 @@ from zilliz_vectorstore import search_in_vector_store
 
 router = APIRouter()
 
-@router.post("/search_in_vectorstore", tags=["search"],summary="Store in vector db",description="Search data in milvus vector database")
-async def store_documents_in_vectorstore( query: dict = Body(..., description="search data in vector store")):
+@router.post("/search_in_vectorstore", tags=["search"],summary="Search in vector db",description="Search data in milvus vector database")
+async def search_in_vectorstore( query: dict = Body(..., description="search data in vector store")):
     """
     Takes user input text and search it in the vector store.
     """
-    print(query)
     try:
-        status = search_in_vector_store(query['query'])
+        status = await search_in_vector_store(query['query'])
         if not status:
             raise HTTPException(status_code=500, detail="Failed to Search documents in vector store.")
         return {'data':status}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error storing documents: {e}")
+        raise HTTPException(status_code=500, detail=f"Error searching documents: {e}")
 
 

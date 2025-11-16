@@ -32,7 +32,7 @@ class SearchQueryBody(BaseModel):
 async def generate_relevant_queries(payload: SearchQueryBody = Body(...)):
     try:
         user_query = payload.query
-        max_gen = payload.max_query_generation
+        max_gen = int(payload.max_query_generation)
         previous_queries = payload.previous_query_generated
 
         current_date = datetime.today().strftime("%d %B %Y")
