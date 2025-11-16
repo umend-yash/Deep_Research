@@ -20,7 +20,7 @@ def summarize_output(state):
         search_results= state['data_for_summarize']
         res=requests.post(summarize_output_url,json={'query':query,"search_results": search_results})
         if res.status_code ==200:
-            state['output']= res.json()
+            state['output']= res.json()['summary']
             state["summarize_output_status"] =True
             return state
         else:
