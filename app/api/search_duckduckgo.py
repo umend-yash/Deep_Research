@@ -15,6 +15,7 @@ router = APIRouter()
 
 class SearchRequest(BaseModel):
     query: str
+    max_url: int =3
 
 @router.post("/search/duckduckgo", tags=["search"], summary="News search with publish date")
 async def search_news(request: SearchRequest = Body(...)):

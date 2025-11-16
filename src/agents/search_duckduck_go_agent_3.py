@@ -14,13 +14,14 @@ search_duckduck_go_url =url_config['search_duckduck_go_url']
 
 def search_over_intenet_with_ddg(state):
     try:
-        query = state['query']
+        query = state['relevent_query'][-1]
         res=requests.post(search_duckduck_go_url,json={'query':query})
         if res.status_code ==200:
             state['search_over_duckduckgo']= res.json()
-            state['web_urls'] = [i['link'] for i in state['search_over_duckduckgo']]
+            out = [i['link'] for i in state['search_over_duckduckgo']]
+            state['web_urls']=out
             state["search_over_duckduckgo_state"] =True
-            return state
+            return {'web_urls':out}
         else:
             state["search_over_duckduckgo_state"] =False
         return state

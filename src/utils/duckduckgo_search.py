@@ -40,7 +40,7 @@ class DuckDuckGo:
                     english_only.append(r)
             except:
                 continue
-        return english_only
+        return english_only[:3]
  
 
     def fetch_web_data(self, url,user_query):
