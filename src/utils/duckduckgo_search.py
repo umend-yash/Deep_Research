@@ -1,6 +1,6 @@
 from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_core.messages import SystemMessage, HumanMessage
-from huggin_face_client import ConnectHugginface
+from langdetect import detect
 import re
 from dateparser import parse
 import requests
@@ -12,6 +12,10 @@ prompt_path = Path.cwd().parent / "src" / "prompt_engineering"
 if str(prompt_path) not in sys.path:
     sys.path.insert(0, str(prompt_path))
 
+llm_path = Path.cwd().parent / "src" / "llm"
+if str(llm_path) not in sys.path:
+    sys.path.insert(0, str(llm_path))
+
 from prompt_template import summerize_data_for_query
 from lite_llm_client import create_chat_model
 
@@ -19,11 +23,27 @@ class DuckDuckGo:
     def __init__(self, max_results=3):
         self.wrapper = DuckDuckGoSearchAPIWrapper(max_results=max_results)
 
-    def search_duckduckgo(self, query):
-        results = self.wrapper.results(query+'with publish date', max_results=self.wrapper.max_results)
-        return results
+class DuckDuckGo:
+    def __init__(self, max_results=3):
+        self.wrapper = DuckDuckGoSearchAPIWrapper(max_results=max_results)
 
-    def fetch_url_text(self, url,user_query):
+    def search_duckduckgo(self, query):
+        results = self.wrapper.results(
+            query + " in English only with publish date",
+            max_results=self.wrapper.max_results,  
+        )
+        english_only = []
+        for r in results:
+            try:
+                text = r.get("snippet") or r.get("body") or r.get("title", "")
+                if detect(text) == "en":
+                    english_only.append(r)
+            except:
+                continue
+        return english_only
+ 
+
+    def fetch_web_data(self, url,user_query):
         try:
             if str(url).startswith('https:'):
                 res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})

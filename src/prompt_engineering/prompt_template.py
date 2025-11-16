@@ -30,6 +30,33 @@ generate_search_queries_system_prompt="""You are a helpful assistant that don't 
 - Provide each search query on a new line, without numbering, bullet points, or any list formatting.
 - Do NOT use "1.", "2.", "1)", or any other form of enumeration. """
 
+
+generate_alternative_search_queries_system_prompt = """
+You are an expert search query generator.
+Your task is to generate NEW search queries that were not generated before.
+Rules:
+- Do NOT repeat or rephrase any of the previously generated queries.
+- Avoid similar queries with only minor wording changes.
+- Produce fresh angles, deeper variations, or different perspectives.
+- Provide each search query on a new line without numbering, bullet points, explanations, or formatting.
+- Do NOT use triple backticks or list markers.
+"""
+
+generate_alternative_search_queries_prompt = """
+"Given the user query: '{user_query}', generate a set of well-structured search queries to retrieve the most relevant information.
+The user previously searched  and
+The following search queries were already generated and did NOT give good results:
+{previous_queries}
+Your task:
+- Generate NEW, unique, alternative search queries.
+- The total number of search queries should not exceed {MAX_QUERY_GENERATIONS}.
+- Create deeper, more specific, or more diverse variations.
+- Avoid duplicates or similar patterns to previous queries.
+Output Format:
+- Each query on a new line.
+- No numbering, no bullet points, no extra text.
+"""
+
 final_news_report_prompt = """#### Task
 Generate a concise and well-structured markdown report based on the given user query and retrieved search results. The report should synthesize key insights, highlight critical information, and present findings in a clear and actionable manner.
 
@@ -120,3 +147,23 @@ involved parties, and any relevant context. The summary should be informative, w
 Data:
 {data}
 Summary in details:"""
+
+roughter_agent_system_prompt="You are an expert router. Your job is to select the best agent for the user query."
+
+roughter_agent_human_prompt = """
+   We have two agents:
+   1. get_relevent_query → Internet Search Agent  
+      - Can search the internet
+      - Best for real-time facts, live data, news,competitor, prices, schedules, etc.
+   2. llm_chat_bot → LLM Knowledge Agent  
+      - Uses only the LLM’s internal knowledge
+      - Best for concepts, explanations, definitions, reasoning.
+   User Query: "{query}"
+   Select the most suitable agent using the rule:
+   - If internet data is needed → pick get_relevent_query
+   - Otherwise → pick llm_chat_bot
+   Return only structured output (AgentSelection).
+   """
+
+
+general_purpose_system_prompt ="You are AI assistenet"

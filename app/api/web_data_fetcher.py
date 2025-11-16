@@ -9,28 +9,23 @@ utils_path = Path.cwd().parent / "src" / "utils"
 if str(utils_path) not in sys.path:
     sys.path.insert(0, str(utils_path))
 
-prompt_path = Path.cwd().parent / "src" / "prompt_engineering"
-if str(prompt_path) not in sys.path:
-    sys.path.insert(0, str(prompt_path))
-
-from huggin_face_client import ConnectHugginface
 from duckduckgo_search import DuckDuckGo
-from prompt_template import generate_search_queries_prompt
-from lite_llm_client import create_chat_model
-
 
 router = APIRouter()
 
 class SearchRequest(BaseModel):
+    url: str
     query: str
 
-@router.post("/search/news", tags=["search"], summary="News search with publish date")
-async def search_news(request: SearchRequest = Body(...)):
+@router.post("/web/fetch", tags=["search"], summary="Fetch web data through api and summarize")
+async def search_web(request: SearchRequest = Body(...)):
     try:
-        print(request)
+        output={}
         search_results  = []
         duck_obj = DuckDuckGo()
-        search_results.append(duck_obj.get_all_data_about(request.query, search_results ))
-        return search_results 
+        search_results=duck_obj.fetch_web_data(request.url,request.query )
+        output['url']=request.url
+        output['summary']=search_results
+        return output 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Search failed: {e}")
