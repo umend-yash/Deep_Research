@@ -167,3 +167,101 @@ roughter_agent_human_prompt = """
 
 
 general_purpose_system_prompt ="You are AI assistenet"
+
+
+analysis_result_content_prompt = """
+You are an expert Competitor Intelligence Analyst.
+
+Your job is to analyze the verified research data and produce:
+1. A complete structured JSON object with detailed competitor insights.
+2. ALL fields must be present exactly as defined.
+3. DO NOT hallucinate under any circumstance.
+4. DO NOT infer anything without direct evidence.
+5. Leave fields empty if information does not exist.
+
+------------------------------------------------------------
+MAIN USER QUERY:
+{main_query}
+
+------------------------------------------------------------
+CLEANED & VERIFIED DOCUMENTS:
+Each entry contains:
+- The source URL
+- The cleaned summary extracted from that URL
+
+{documents_with_urls}
+
+------------------------------------------------------------
+STRICT RULES:
+- Output ONLY a single valid JSON object.
+- NO markdown.
+- NO explanations.
+- NO comments.
+- NO text before or after the JSON.
+- JSON must be fully compliant with normal JSON parsers.
+- No missing fields. No extra fields.
+- All arrays/objects must exist even if empty.
+- All boolean values must be lowercase (true/false).
+
+------------------------------------------------------------
+YOU MUST RETURN THE JSON STRUCTURE BELOW (NO CHANGES):
+
+{{
+  "competitors": [
+    {{
+      "name": "",
+      "description": "",
+      "website": "",
+      "products": [],
+      "strengths": [],
+      "weaknesses": [],
+      "pricing_notes": [],
+      "feature_highlights": [],
+      "market_position": ""
+    }}
+  ],
+
+  "products": [
+    {{
+      "name": "",
+      "description": "",
+      "key_features": [],
+      "pricing": "",
+      "url": "",
+      "target_segment": ""
+    }}
+  ],
+
+  "pricing": {{}},
+  "features": {{}},
+
+  "strengths": {{}},
+  "weaknesses": {{}},
+  "opportunities": {{}},
+  "threats": {{}},
+
+  "market_moves": [],
+  "risks": [],
+  "differentiators": [],
+
+  "summary": "",
+  "best_url": ""
+}}
+
+------------------------------------------------------------
+INSTRUCTIONS FOR "summary":
+- 3 to 5 sentences.
+- Directly answer the MAIN QUERY.
+- Use ONLY evidence present in the verified documents.
+- No fluff, no hallucination, no assumptions.
+
+INSTRUCTIONS FOR ALL OTHER FIELDS:
+- Use strict evidence from documents.
+- Group insights by competitor when possible.
+- Leave fields empty when no evidence exists.
+- DO NOT generate text that isn't directly supported.
+
+------------------------------------------------------------
+OUTPUT NOW:
+Return ONLY the above JSON structure, filled with evidence-based values.
+"""  # Note: triple-quote ends here for multiline string

@@ -50,4 +50,6 @@ graph.add_edge("summarize_output",END)
 graph.add_edge("llm_chat_bot",END)
 compiled= graph.compile()
 
+compiled.invoke({'query':'hi'})
+
 

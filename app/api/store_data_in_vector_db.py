@@ -15,7 +15,7 @@ from zilliz_vectorstore import store_in_vector_store
 router = APIRouter()
 
 @router.post("/store_in_vectorstore", tags=["Store"],summary="Store in vector db",description="Store importent data in milvus vector database")
-def store_documents_in_vectorstore( input: dict = Body(..., description="Input text to store in vector store")):
+async def store_documents_in_vectorstore( input: dict = Body(..., description="Input text to store in vector store")):
     """
     Takes user input text and stores it in the vector store.
     """

@@ -15,7 +15,7 @@ from zilliz_vectorstore import search_in_vector_store
 router = APIRouter()
 
 @router.post("/search_in_vectorstore", tags=["search"],summary="Store in vector db",description="Search data in milvus vector database")
-def store_documents_in_vectorstore( query: dict = Body(..., description="search data in vector store")):
+async def store_documents_in_vectorstore( query: dict = Body(..., description="search data in vector store")):
     """
     Takes user input text and search it in the vector store.
     """
