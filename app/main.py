@@ -7,11 +7,13 @@ from api import summarize_news_data
 from api import store_data_in_vector_db
 from api import search_data_in_vector_db
 from api import analysis_search_result
+from api import concatenated_search
 
 
 app = FastAPI()
 
 app.include_router(relevant_queries.router, prefix="/api", tags=["Relevant Queries"])
+app.include_router(concatenated_search.router, prefix="/api", tags=["Concatenated Search"])
 app.include_router(search_duckduckgo.router, prefix="/api", tags=["Search News"])
 app.include_router(web_data_fetcher.router, prefix="/api", tags=["Fetch data from web"])
 app.include_router(store_data_in_vector_db.router, prefix="/api", tags=["Store data In DB "])
