@@ -21,8 +21,8 @@ async def search_in_vectorstore( query: dict = Body(..., description="search dat
     """
     try:
         status = await search_in_vector_store(query['query'])
-        if not status:
-            raise HTTPException(status_code=500, detail="Failed to Search documents in vector store.")
+        # if not status:
+        #     raise HTTPException(status_code=200, detail="No relevant documents found in vector store.")
         return {'data':status}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error searching documents: {e}")

@@ -108,7 +108,7 @@ async def store_in_vector_store(input):
 
 
 
-async def search_in_vector_store(user_input, top_k=5):
+async def search_in_vector_store(user_input, top_k=5, similarity_threshold=0.5):
     try:
         azure_embedding = connect_azure_embedding()
         embeddings = azure_embedding["model"]
@@ -126,15 +126,19 @@ async def search_in_vector_store(user_input, top_k=5):
             user_input,
             k=top_k
         )
-        output = []
+        # output = []
+        result = ""
         for doc, score in results:
-            output.append({
-                "content": doc.page_content,
-                "metadata": doc.metadata,
-                "score": 1/(1+score)
-            })
-        return output
+            similarity = 1 / (1 + score)  # Convert distance to similarity (0 to 1)
+            if similarity > similarity_threshold:
+                # output.append({
+                #     "content": doc.page_content,
+                #     "metadata": doc.metadata,
+                #     "score": similarity
+                # })
+                result += doc.page_content + "\n"
+        return result
     except Exception as e:
         print("Error:", e)
-        return []
+        return ""
  
